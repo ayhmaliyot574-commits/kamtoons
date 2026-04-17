@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>مطعم كامتون</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  color: white;
+  text-align: center;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+    url("https://images.unsplash.com/photo-1594007654729-407eedc4be65");
+
+  background-size: cover;
+}
+
+.invoice {
+  background: rgba(0,0,0,0.7);
+  padding: 20px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 15px;
+}
+
+h2 { color: #a855f7; }
+h3 { color: #f97316; }
+
+input {
+  padding: 10px;
+  margin: 5px;
+  width: 80%;
+}
+
+button {
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  color: white;
+}
+
+.add { background: purple; }
+.delete { background: red; }
+.clear { background: orange; }
+.print { background: green; }
+
+li {
+  margin: 5px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="invoice">
+
+<h2>🧾 مطعم كامتون</h2>
+
+<p id="datetime"></p>
+<p>رقم الفاتورة: <span id="invoiceNum"></span></p>
+
+<input id="customer" placeholder="اسم الزبون">
+
+<h3>➕ إضافة منتج</h3>
+
+<input id="name" placeholder="اسم المنتج">
+<input id="price" type="number" placeholder="السعر">
+<input id="qty" type="number" placeholder="الكمية">
+
+<button class="add" onclick="addItem()">إضافة</button>
+
+<hr>
+
+<ul id="list"></ul>
+
+<h2>المجموع: <span id="total">0</span></h2>
+
+<input id="money" placeholder="المبلغ المدفوع" type="number">
+<button onclick="calcChange()">احسب الباقي</button>
+
+<h3 id="change"></h3>
+
+<button class="clear" onclick="clearAll()">🗑️ مسح الكل</button>
+<button class="print" onclick="printPage()">🖨️ طباعة</button>
+
+</div>
+
+<script>
+let total = 0;
+
+document.getElementById("invoiceNum").innerText =
+Math.floor(Math.random() * 100000);
+
+// وقت تلقائي
+let now = new Date();
+document.getElementById("datetime").innerText =
+"📅 " + now.toLocaleDateString() + " ⏰ " + now.toLocaleTimeString();
+
+function addItem() {
+  let name = document.getElementById("name").value;
+  let price = parseFloat(document.getElementById("price").value);
+  let qty = parseInt(document.getElementById("qty").value);
+
+  if (!name || isNaN(price) || isNaN(qty)) {
+    alert("املأ كل الحقول!");
+    return;
+  }
+
+  let sum = price * qty;
+  total += sum;
+
+  let li = document.createElement("li");
+
+  li.innerHTML = `
+    ${name} | ${qty} = ${sum}
+    <button class="delete" onclick="removeItem(this, ${sum})">❌</button>
+  `;
+
+  document.getElementById("list").appendChild(li);
+  document.getElementById("total").innerText = total;
+
+  // تفريغ الحقول
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("qty").value = "";
+}
+
+function removeItem(btn, value) {
+  total -= value;
+  document.getElementById("total").innerText = total;
+  btn.parentElement.remove();
+}
+
+function clearAll() {
+  document.getElementById("list").innerHTML = "";
+  total = 0;
+  document.getElementById("total").innerText = 0;
+}
+
+function calcChange() {
+  let money = parseFloat(document.getElementById("money").value);
+  let change = money - total;
+
+  document.getElementById("change").innerText =
+  "الباقي: " + change;
+}
+
+function printPage() {
+  window.print();
+}
+</script>
+
+</body>
+</html>
