@@ -18,10 +18,7 @@ h1 {
   padding: 10px;
 }
 
-.phone {
-  margin: 5px;
-  font-size: 18px;
-}
+.phone { margin: 5px; }
 
 .menu {
   display: grid;
@@ -30,21 +27,22 @@ h1 {
   padding: 10px;
 }
 
-.category {
+.item {
   background: #222;
+  border-radius: 10px;
   padding: 10px;
+}
+
+.item img {
+  width: 80px;
+  height: 80px;
   border-radius: 10px;
 }
 
-.category h2 {
-  color: orange;
-}
-
 button {
-  display: block;
   width: 100%;
-  margin: 5px 0;
   padding: 8px;
+  margin-top: 5px;
   border: none;
   border-radius: 8px;
   background: purple;
@@ -78,40 +76,47 @@ button {
 
 <div class="menu">
 
-<!-- بيتزا -->
-<div class="category">
-<h2>بيتزا</h2>
-<button onclick="add('بيتزا خضار',18)">بيتزا خضار - 18</button>
-<button onclick="add('بيتزا مارجريتا',18)">بيتزا مارجريتا - 18</button>
-<button onclick="add('بيتزا مشكل جبن',18)">بيتزا مشكل جبن - 18</button>
-<button onclick="add('بيتزا دجاج',21)">بيتزا دجاج - 21</button>
-<button onclick="add('بيتزا لحم',21)">بيتزا لحم - 21</button>
-<button onclick="add('بيتزا بيبروني',21)">بيتزا بيبروني - 21</button>
-</div>
+<!-- أكلات كثيرة -->
+<script>
+let foods = [
+["بركر",4000,"https://images.unsplash.com/photo-1550547660-d9450f859349"],
+["بيتزا",5000,"https://images.unsplash.com/photo-1594007654729-407eedc4be65"],
+["بطاطس",2000,"https://images.unsplash.com/photo-1576107232684-1279f390859f"],
+["شاورما",4500,"https://images.unsplash.com/photo-1604908554007-43d1a6f6f1d9"],
+["كباب",6000,"https://images.unsplash.com/photo-1604908177522-040c2c48d1db"],
+["فلافل",1500,"https://images.unsplash.com/photo-1625944525533-473f1b9c1b6c"],
+["سمك",7000,"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"],
+["ستيك",9000,"https://images.unsplash.com/photo-1604908177169-3d4bdf6ebadc"],
+["دجاج مشوي",5500,"https://images.unsplash.com/photo-1604908554097-1e07d7dd1c3f"],
+["عصير ليمون",1500,"https://images.unsplash.com/photo-1571687949924-9f1b9e7d8b60"],
+["عصير برتقال",1500,"https://images.unsplash.com/photo-1558642452-9d2a7deb7f62"],
+["شاي",500,"https://images.unsplash.com/photo-1511920170033-f8396924c348"],
+["قهوة",1000,"https://images.unsplash.com/photo-1509042239860-f550ce710b93"],
+["آيس كريم",2000,"https://images.unsplash.com/photo-1497032205916-ac775f0649ae"],
+["كنافة",3000,"https://images.unsplash.com/photo-1625944525533-473f1b9c1b6c"],
+["بسبوسة",2500,"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"],
+["رز",2000,"https://images.unsplash.com/photo-1586201375761-83865001e31c"],
+["مندي",8000,"https://images.unsplash.com/photo-1604908177522-040c2c48d1db"],
+["منسف",9000,"https://images.unsplash.com/photo-1604908177169-3d4bdf6ebadc"],
+["دولمة",6000,"https://images.unsplash.com/photo-1604908554007-43d1a6f6f1d9"]
+];
 
-<!-- مناقيش -->
-<div class="category">
-<h2>مناقيش</h2>
-<button onclick="add('جبنة عكاوي',11)">جبنة عكاوي - 11</button>
-<button onclick="add('جبنة سائل',9)">جبنة سائل - 9</button>
-<button onclick="add('جبنة موزاريلا',11)">جبنة موزاريلا - 11</button>
-<button onclick="add('زعتر',10)">زعتر - 10</button>
-<button onclick="add('لبنة',10)">لبنة - 10</button>
-</div>
+let menu = document.currentScript.parentElement;
 
-<!-- بطاطس -->
-<div class="category">
-<h2>بطاطس</h2>
-<button onclick="add('بطاطس',7)">بطاطس - 7</button>
-<button onclick="add('بطاطس بالجبن',8)">بطاطس بالجبن - 8</button>
-</div>
+foods.forEach(f => {
+  let div = document.createElement("div");
+  div.className = "item";
 
-<!-- حلويات -->
-<div class="category">
-<h2>الحلا</h2>
-<button onclick="add('نوتيلا',10)">نوتيلا - 10</button>
-<button onclick="add('نوتيلا موز',12)">نوتيلا موز - 12</button>
-</div>
+  div.innerHTML = `
+    <img src="${f[2]}">
+    <div>${f[0]}</div>
+    <div>${f[1]}</div>
+    <button onclick="add('${f[0]}',${f[1]})">شراء</button>
+  `;
+
+  menu.appendChild(div);
+});
+</script>
 
 </div>
 
@@ -135,7 +140,6 @@ button {
 let items = [];
 let total = 0;
 
-// رقم فاتورة
 let num = localStorage.getItem("inv") || 1;
 document.getElementById("num").innerText = num;
 
