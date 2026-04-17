@@ -6,69 +6,106 @@
 
 <style>
 body {
-  margin: 0;
+  margin:0;
   font-family: Arial;
-  background: #111;
-  color: white;
-  text-align: center;
+  background:#111;
+  color:white;
+  text-align:center;
 }
 
-h1 {
-  color: orange;
+/* شاشة كلمة المرور */
+#login {
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
-.menu {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.item {
-  background: #222;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  width: 140px;
-}
-
-.item img {
-  width: 100%;
-  height: 90px;
-  border-radius: 10px;
+input {
+  padding:10px;
+  border-radius:10px;
+  border:none;
 }
 
 button {
-  margin-top: 5px;
-  padding: 5px;
-  border: none;
-  background: purple;
-  color: white;
-  border-radius: 5px;
+  padding:8px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
 
+/* المنيو */
+#menu { display:none; }
+
+.grid {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.item {
+  background:#222;
+  margin:10px;
+  padding:10px;
+  border-radius:15px;
+  width:140px;
+  box-shadow:0 0 10px #000;
+}
+
+.item img {
+  width:100%;
+  height:90px;
+  border-radius:10px;
+}
+
+.buy {
+  background:orange;
+  color:black;
+  margin-top:5px;
+}
+
+/* زر سري */
+.secret {
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  opacity:0.1;
+}
+
+/* الفاتورة */
 #invoice {
-  display: none;
-  background: white;
-  color: black;
-  padding: 20px;
+  display:none;
+  background:white;
+  color:black;
+  padding:20px;
 }
-
 </style>
 </head>
 
 <body>
 
-<h1>🍕 مطعم كامتون</h1>
+<!-- كلمة مرور -->
+<div id="login">
+  <h2>🔒 كلمة المرور</h2>
+  <input id="pass" type="password">
+  <button onclick="check()">OK</button>
+</div>
+
+<!-- المنيو -->
+<div id="menu">
+
+<h2 style="color:orange">🍕 كامتون</h2>
 <p>📞 07905264140</p>
 
-<div class="menu">
+<div class="grid">
 
 <!-- بيتزا -->
 <div class="item">
 <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65">
 <p>بيتزا</p>
 <p>8000</p>
-<button onclick="buy('بيتزا',8000)">شراء</button>
+<button class="buy" onclick="buy('بيتزا',8000)">شراء</button>
 </div>
 
 <!-- بركر -->
@@ -76,23 +113,7 @@ button {
 <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
 <p>بركر</p>
 <p>4000</p>
-<button onclick="buy('بركر',4000)">شراء</button>
-</div>
-
-<!-- بطاطس -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5">
-<p>بطاطس</p>
-<p>2000</p>
-<button onclick="buy('بطاطس',2000)">شراء</button>
-</div>
-
-<!-- كباب -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
-<p>كباب</p>
-<p>6000</p>
-<button onclick="buy('كباب',6000)">شراء</button>
+<button class="buy" onclick="buy('بركر',4000)">شراء</button>
 </div>
 
 <!-- مندي -->
@@ -100,23 +121,23 @@ button {
 <img src="https://images.unsplash.com/photo-1604908812653-3e49c1fda92e">
 <p>مندي</p>
 <p>8000</p>
-<button onclick="buy('مندي',8000)">شراء</button>
+<button class="buy" onclick="buy('مندي',8000)">شراء</button>
 </div>
 
-<!-- منسف -->
+<!-- كباب -->
 <div class="item">
-<img src="https://images.unsplash.com/photo-1601050690597-df0568f70950">
-<p>منسف</p>
-<p>9000</p>
-<button onclick="buy('منسف',9000)">شراء</button>
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+<p>كباب</p>
+<p>6000</p>
+<button class="buy" onclick="buy('كباب',6000)">شراء</button>
 </div>
 
-<!-- دولمة -->
+<!-- بطاطس -->
 <div class="item">
-<img src="https://images.unsplash.com/photo-1617196038435-7c6c1c2de3c8">
-<p>دولمة</p>
-<p>7000</p>
-<button onclick="buy('دولمة',7000)">شراء</button>
+<img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5">
+<p>بطاطس</p>
+<p>2000</p>
+<button class="buy" onclick="buy('بطاطس',2000)">شراء</button>
 </div>
 
 <!-- عصير -->
@@ -124,41 +145,38 @@ button {
 <img src="https://images.unsplash.com/photo-1553530666-ba11a90f7e40">
 <p>عصير</p>
 <p>1500</p>
-<button onclick="buy('عصير',1500)">شراء</button>
-</div>
-
-<!-- بيبسي -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1581636625402-29b2a704ef13">
-<p>بيبسي</p>
-<p>1000</p>
-<button onclick="buy('بيبسي',1000)">شراء</button>
+<button class="buy" onclick="buy('عصير',1500)">شراء</button>
 </div>
 
 </div>
 
-<br>
-<button onclick="showInvoice()">📄 عرض الفاتورة</button>
+</div>
 
+<!-- زر سري -->
+<button class="secret" onclick="openInvoice()">.</button>
+
+<!-- الفاتورة (بس الك) -->
 <div id="invoice">
 <h2>🧾 الفاتورة</h2>
-<p>📞 07905264140</p>
-<p id="date"></p>
-
 <ul id="list"></ul>
-
-<h3 id="total">المجموع: 0</h3>
-
-<button onclick="window.print()">🖨️ طباعة</button>
+<h3 id="total">0</h3>
+<button onclick="window.print()">طباعة</button>
 </div>
 
 <script>
 let total = 0;
 
-let now = new Date();
-document.getElementById("date").innerText =
-"📅 " + now.toLocaleDateString() + " ⏰ " + now.toLocaleTimeString();
+/* دخول */
+function check(){
+  if(document.getElementById("pass").value === "Ff511Ff522Ff533Ff"){
+    document.getElementById("login").style.display="none";
+    document.getElementById("menu").style.display="block";
+  } else {
+    alert("خطأ");
+  }
+}
 
+/* شراء */
 function buy(name, price){
   total += price;
 
@@ -169,8 +187,12 @@ function buy(name, price){
   document.getElementById("total").innerText = "المجموع: " + total;
 }
 
-function showInvoice(){
-  document.getElementById("invoice").style.display = "block";
+/* فتح الفاتورة (سري) */
+function openInvoice(){
+  let code = prompt("ادخل كود الادمن");
+  if(code === "admin123"){
+    document.getElementById("invoice").style.display="block";
+  }
 }
 </script>
 
