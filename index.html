@@ -8,18 +8,65 @@
 body {
   margin: 0;
   font-family: Arial;
+  background: black;
+  color: white;
   text-align: center;
-  background: #111;
+}
+
+/* شاشة كلمة المرور */
+#login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login input {
+  width: 250px;
+  padding: 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+}
+
+#login button {
+  padding: 15px;
+  margin-left: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: purple;
   color: white;
 }
 
-.menu button {
-  padding: 10px;
-  margin: 5px;
+/* الموقع */
+#app {
+  display: none;
+  background: #111;
+  min-height: 100vh;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.item {
+  display: flex;
+  align-items: center;
   background: purple;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-left: 10px;
 }
 
 .invoice {
@@ -32,9 +79,16 @@ body {
   border-radius: 10px;
 }
 
-.delete { background: red; color: white; }
-.print { background: green; color: white; padding: 10px; margin-top: 10px; }
+button {
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+}
 
+.print { background: green; color: white; }
+
+/* طباعة */
 @media print {
   body * { display: none; }
   .invoice, .invoice * { display: block; }
@@ -44,23 +98,21 @@ body {
 </head>
 <body>
 
-<h2>🍕 المنيو</h2>
-
-<div class="menu">
-<button onclick="addItem('مندي',8000)">مندي 8000</button>
-<button onclick="addItem('منسف',9000)">منسف 9000</button>
-<button onclick="addItem('دولمة',7000)">دولمة 7000</button>
-<button onclick="addItem('كباب',6000)">كباب 6000</button>
-<button onclick="addItem('بركر',4000)">بركر 4000</button>
-<button onclick="addItem('بطاطس',2000)">بطاطس 2000</button>
-<button onclick="addItem('بيبسي',1000)">بيبسي 1000</button>
+<!-- 🔐 فقط مربع كلمة المرور -->
+<div id="login">
+  <input type="password" id="pass" placeholder="Enter Password">
+  <button onclick="checkPass()">OK</button>
 </div>
 
-<br>
-<button onclick="goInvoice()">➡️ عرض الفاتورة</button>
+<!-- 🔥 الموقع -->
+<div id="app">
+
+<h2>🍕 المنيو (300 أكلة)</h2>
+<div class="menu" id="menu"></div>
+
+<button onclick="goInvoice()">➡️ الفاتورة</button>
 
 <div class="invoice" id="invoice">
-
 <h3>🧾 مطعم كامتون</h3>
 <p>📞 07905264140</p>
 
@@ -72,30 +124,61 @@ body {
 <h3>المجموع: <span id="total">0</span></h3>
 
 <button class="print" onclick="window.print()">🖨️ طباعة</button>
+</div>
 
 </div>
 
 <script>
+// كلمة المرور
+function checkPass() {
+  let p = document.getElementById("pass").value;
+
+  if (p === "Ff511Ff522Ff533Ff") {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+  } else {
+    alert("❌ كلمة المرور غلط");
+  }
+}
+
+// بيانات
 let items = {};
 let total = 0;
 
-// رقم فاتورة متصاعد
+// صورة
+let imgSrc = "https://images.unsplash.com/photo-1594007654729-407eedc4be65";
+
+// توليد 300 أكلة
+let menuDiv = document.getElementById("menu");
+
+for (let i = 1; i <= 300; i++) {
+  let price = 1000 + (i * 20);
+
+  let div = document.createElement("div");
+  div.className = "item";
+
+  div.innerHTML = `
+    <img src="${imgSrc}">
+    <span>أكلة ${i} - ${price}</span>
+  `;
+
+  div.onclick = () => addItem("أكلة " + i, price);
+
+  menuDiv.appendChild(div);
+}
+
+// رقم فاتورة
 let invNum = localStorage.getItem("inv") || 1;
 document.getElementById("inv").innerText = invNum;
 
 function addItem(name, price) {
-  if (!items[name]) {
-    items[name] = {price: price, qty: 0};
-  }
-
-  if (items[name].qty >= 20) return; // حد أقصى 20
-
+  if (!items[name]) items[name] = {price: price, qty: 0};
+  if (items[name].qty >= 20) return;
   items[name].qty++;
 }
 
 function goInvoice() {
   document.querySelector(".menu").style.display = "none";
-  document.querySelector("button").style.display = "none";
 
   let list = document.getElementById("list");
   list.innerHTML = "";
@@ -119,7 +202,6 @@ function goInvoice() {
 
   document.getElementById("invoice").style.display = "block";
 
-  // زيادة رقم الفاتورة
   localStorage.setItem("inv", ++invNum);
 }
 </script>
