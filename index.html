@@ -14,160 +14,163 @@ body {
 }
 
 h1 {
-  background: orange;
-  padding: 10px;
+  color: orange;
 }
 
-.phone { margin: 5px; }
-
 .menu {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .item {
   background: #222;
-  border-radius: 10px;
+  margin: 10px;
   padding: 10px;
+  border-radius: 10px;
+  width: 140px;
 }
 
 .item img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 90px;
   border-radius: 10px;
 }
 
 button {
-  width: 100%;
-  padding: 8px;
   margin-top: 5px;
+  padding: 5px;
   border: none;
-  border-radius: 8px;
   background: purple;
   color: white;
-  cursor: pointer;
+  border-radius: 5px;
 }
 
-.invoice {
+#invoice {
   display: none;
   background: white;
   color: black;
-  width: 300px;
-  margin: 20px auto;
-  padding: 15px;
-  border-radius: 10px;
+  padding: 20px;
 }
 
-.print { background: green; }
-
-@media print {
-  body * { display: none; }
-  .invoice, .invoice * { display: block; }
-}
 </style>
-
 </head>
+
 <body>
 
 <h1>🍕 مطعم كامتون</h1>
-<div class="phone">📞 07905264140</div>
+<p>📞 07905264140</p>
 
 <div class="menu">
 
-<!-- أكلات كثيرة -->
-<script>
-let foods = [
-["بركر",4000,"https://images.unsplash.com/photo-1550547660-d9450f859349"],
-["بيتزا",5000,"https://images.unsplash.com/photo-1594007654729-407eedc4be65"],
-["بطاطس",2000,"https://images.unsplash.com/photo-1576107232684-1279f390859f"],
-["شاورما",4500,"https://images.unsplash.com/photo-1604908554007-43d1a6f6f1d9"],
-["كباب",6000,"https://images.unsplash.com/photo-1604908177522-040c2c48d1db"],
-["فلافل",1500,"https://images.unsplash.com/photo-1625944525533-473f1b9c1b6c"],
-["سمك",7000,"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"],
-["ستيك",9000,"https://images.unsplash.com/photo-1604908177169-3d4bdf6ebadc"],
-["دجاج مشوي",5500,"https://images.unsplash.com/photo-1604908554097-1e07d7dd1c3f"],
-["عصير ليمون",1500,"https://images.unsplash.com/photo-1571687949924-9f1b9e7d8b60"],
-["عصير برتقال",1500,"https://images.unsplash.com/photo-1558642452-9d2a7deb7f62"],
-["شاي",500,"https://images.unsplash.com/photo-1511920170033-f8396924c348"],
-["قهوة",1000,"https://images.unsplash.com/photo-1509042239860-f550ce710b93"],
-["آيس كريم",2000,"https://images.unsplash.com/photo-1497032205916-ac775f0649ae"],
-["كنافة",3000,"https://images.unsplash.com/photo-1625944525533-473f1b9c1b6c"],
-["بسبوسة",2500,"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"],
-["رز",2000,"https://images.unsplash.com/photo-1586201375761-83865001e31c"],
-["مندي",8000,"https://images.unsplash.com/photo-1604908177522-040c2c48d1db"],
-["منسف",9000,"https://images.unsplash.com/photo-1604908177169-3d4bdf6ebadc"],
-["دولمة",6000,"https://images.unsplash.com/photo-1604908554007-43d1a6f6f1d9"]
-];
+<!-- بيتزا -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65">
+<p>بيتزا</p>
+<p>8000</p>
+<button onclick="buy('بيتزا',8000)">شراء</button>
+</div>
 
-let menu = document.currentScript.parentElement;
+<!-- بركر -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+<p>بركر</p>
+<p>4000</p>
+<button onclick="buy('بركر',4000)">شراء</button>
+</div>
 
-foods.forEach(f => {
-  let div = document.createElement("div");
-  div.className = "item";
+<!-- بطاطس -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5">
+<p>بطاطس</p>
+<p>2000</p>
+<button onclick="buy('بطاطس',2000)">شراء</button>
+</div>
 
-  div.innerHTML = `
-    <img src="${f[2]}">
-    <div>${f[0]}</div>
-    <div>${f[1]}</div>
-    <button onclick="add('${f[0]}',${f[1]})">شراء</button>
-  `;
+<!-- كباب -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+<p>كباب</p>
+<p>6000</p>
+<button onclick="buy('كباب',6000)">شراء</button>
+</div>
 
-  menu.appendChild(div);
-});
-</script>
+<!-- مندي -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1604908812653-3e49c1fda92e">
+<p>مندي</p>
+<p>8000</p>
+<button onclick="buy('مندي',8000)">شراء</button>
+</div>
+
+<!-- منسف -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1601050690597-df0568f70950">
+<p>منسف</p>
+<p>9000</p>
+<button onclick="buy('منسف',9000)">شراء</button>
+</div>
+
+<!-- دولمة -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1617196038435-7c6c1c2de3c8">
+<p>دولمة</p>
+<p>7000</p>
+<button onclick="buy('دولمة',7000)">شراء</button>
+</div>
+
+<!-- عصير -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1553530666-ba11a90f7e40">
+<p>عصير</p>
+<p>1500</p>
+<button onclick="buy('عصير',1500)">شراء</button>
+</div>
+
+<!-- بيبسي -->
+<div class="item">
+<img src="https://images.unsplash.com/photo-1581636625402-29b2a704ef13">
+<p>بيبسي</p>
+<p>1000</p>
+<button onclick="buy('بيبسي',1000)">شراء</button>
+</div>
 
 </div>
 
+<br>
 <button onclick="showInvoice()">📄 عرض الفاتورة</button>
 
-<div class="invoice" id="invoice">
-<h3>🧾 مطعم كامتون</h3>
+<div id="invoice">
+<h2>🧾 الفاتورة</h2>
 <p>📞 07905264140</p>
-
 <p id="date"></p>
-<p>رقم الفاتورة: <span id="num"></span></p>
 
 <ul id="list"></ul>
 
-<h3>المجموع: <span id="total">0</span></h3>
+<h3 id="total">المجموع: 0</h3>
 
-<button class="print" onclick="window.print()">🖨️ طباعة</button>
+<button onclick="window.print()">🖨️ طباعة</button>
 </div>
 
 <script>
-let items = [];
 let total = 0;
 
-let num = localStorage.getItem("inv") || 1;
-document.getElementById("num").innerText = num;
+let now = new Date();
+document.getElementById("date").innerText =
+"📅 " + now.toLocaleDateString() + " ⏰ " + now.toLocaleTimeString();
 
-function add(name, price) {
-  items.push({name, price});
+function buy(name, price){
+  total += price;
+
+  let li = document.createElement("li");
+  li.innerText = name + " - " + price;
+
+  document.getElementById("list").appendChild(li);
+  document.getElementById("total").innerText = "المجموع: " + total;
 }
 
-function showInvoice() {
-  let list = document.getElementById("list");
-  list.innerHTML = "";
-  total = 0;
-
-  items.forEach(i => {
-    total += i.price;
-    let li = document.createElement("li");
-    li.innerText = i.name + " - " + i.price;
-    list.appendChild(li);
-  });
-
-  document.getElementById("total").innerText = total;
-
-  let now = new Date();
-  document.getElementById("date").innerText =
-    now.toLocaleDateString() + " " + now.toLocaleTimeString();
-
+function showInvoice(){
   document.getElementById("invoice").style.display = "block";
-
-  localStorage.setItem("inv", ++num);
 }
 </script>
 
