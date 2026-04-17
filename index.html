@@ -1,167 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>مطعم كامتون</title>
+function printInvoice(){
 
-<style>
-body {
-  margin:0;
-  font-family: Arial;
-  background:#111;
-  color:white;
-  text-align:center;
-}
+  let content = `
+  <div style="width:220px;font-family:monospace">
+    <h3 style="text-align:center">كامتون</h3>
+    <p style="text-align:center">07905264140</p>
+    <hr>
+  `;
 
-/* شاشة القفل */
-#login {
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-}
+  let total = 0;
 
-input {
-  padding:10px;
-  border-radius:10px;
-  border:none;
-}
+  items.forEach(i=>{
+    content += `
+      <div style="display:flex;justify-content:space-between">
+        <span>${i.name}</span>
+        <span>${i.price}</span>
+      </div>
+    `;
+    total += i.price;
+  });
 
-button {
-  padding:8px;
-  border:none;
-  border-radius:10px;
-  background:#9333ea;
-  color:white;
-}
-
-/* المنيو */
-#menu { display:none; }
-
-.header {
-  background:orange;
-  padding:10px;
-}
-
-.grid {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-
-.item {
-  background:#222;
-  margin:10px;
-  padding:10px;
-  border-radius:15px;
-  width:150px;
-}
-
-.item img {
-  width:100%;
-  height:100px;
-  border-radius:10px;
-  object-fit:cover;
-}
-
-.buy {
-  background:#9333ea;
-  margin-top:5px;
-}
-</style>
-</head>
-
-<body>
-
-<!-- كلمة مرور -->
-<div id="login">
-  <h2>🔒 ادخل كلمة المرور</h2>
-  <input id="pass" type="password">
-  <br><br>
-  <button onclick="check()">دخول</button>
-</div>
-
-<!-- المنيو -->
-<div id="menu">
-
-<div class="header">
-  <h2>🍕 مطعم كامتون</h2>
-  <p>📞 07905264140</p>
-</div>
-
-<div class="grid" id="grid"></div>
-
-</div>
-
-<script>
-function check(){
-  let password = document.getElementById("pass").value;
-
-  if(password === "Ff511Ff522Ff533Ff"){
-    document.getElementById("login").style.display = "none";
-    document.getElementById("menu").style.display = "block";
-  } else {
-    alert("❌ كلمة المرور غلط");
-  }
-}
-
-let foods = [
-{n:"بركر",p:4000,i:"https://images.unsplash.com/photo-1550547660-d9450f859349"},
-{n:"بيتزا",p:5000,i:"https://images.unsplash.com/photo-1594007654729-407eedc4be65"},
-{n:"بطاطس",p:2000,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
-{n:"كباب",p:6000,i:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"},
-{n:"مندي",p:8000,i:"https://images.unsplash.com/photo-1604908812653-3e49c1fda92e"},
-{n:"منسف",p:9000,i:"https://images.unsplash.com/photo-1604908554168-8f43f8f2c2af"},
-{n:"دولمة",p:7000,i:"https://images.unsplash.com/photo-1617196034183-421b4917c92d"},
-{n:"فلافل",p:1500,i:"https://images.unsplash.com/photo-1617196034796-73dfa50e8c90"},
-{n:"شاورما",p:4500,i:"https://images.unsplash.com/photo-1604909052981-68d7c53e36b0"},
-{n:"سمك",p:7000,i:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"},
-{n:"دجاج مشوي",p:5500,i:"https://images.unsplash.com/photo-1604908177522-402c7b0f7fd5"},
-{n:"عصير ليمون",p:1500,i:"https://images.unsplash.com/photo-1553530666-ba11a90f7e40"},
-{n:"عصير برتقال",p:1500,i:"https://images.unsplash.com/photo-1572441710534-6807e7a2d1c6"},
-{n:"شاي",p:500,i:"https://images.unsplash.com/photo-1576092768241-dec231879fc3"},
-{n:"قهوة",p:1000,i:"https://images.unsplash.com/photo-1509042239860-f550ce710b93"},
-{n:"كيك",p:2000,i:"https://images.unsplash.com/photo-1578985545062-69928b1d9587"},
-{n:"كنافة",p:3000,i:"https://images.unsplash.com/photo-1604908177481-57e8e64fdf75"},
-{n:"آيس كريم",p:2000,i:"https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"},
-{n:"برياني",p:7500,i:"https://images.unsplash.com/photo-1604908177433-85b5c2e5c98b"},
-{n:"نودلز",p:3500,i:"https://images.unsplash.com/photo-1604908177192-4a8b2ddb3f7e"},
-{n:"ستيك",p:12000,i:"https://images.unsplash.com/photo-1551183053-bf91a1d81141"},
-{n:"بيتزا دجاج",p:5500,i:"https://images.unsplash.com/photo-1548365328-9f547fb0953c"},
-{n:"بيتزا خضار",p:5000,i:"https://images.unsplash.com/photo-1601924638867-3ec2f2c0c94b"},
-{n:"بيتزا لحم",p:6000,i:"https://images.unsplash.com/photo-1542281286-9e0a16bb7366"},
-{n:"رز أبيض",p:2000,i:"https://images.unsplash.com/photo-1586201375761-83865001e17b"},
-{n:"رز برياني",p:4000,i:"https://images.unsplash.com/photo-1604908177099-9df47b4b51f7"},
-{n:"سلطة",p:1500,i:"https://images.unsplash.com/photo-1556911220-bff31c812dba"},
-{n:"تبولة",p:1500,i:"https://images.unsplash.com/photo-1604908177123-fb3e7d3f8b6a"},
-{n:"حمص",p:1200,i:"https://images.unsplash.com/photo-1604908177110-4bb7a8a798ed"},
-{n:"متبل",p:1200,i:"https://images.unsplash.com/photo-1604908177101-5d7a9a7a89c7"},
-{n:"بيتزا تونة",p:5500,i:"https://images.unsplash.com/photo-1601924638867-3ec2f2c0c94b"},
-{n:"بيتزا سجق",p:6000,i:"https://images.unsplash.com/photo-1513104890138-7c749659a591"},
-{n:"بطاطس جبن",p:3000,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
-{n:"بطاطس حار",p:2500,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
-{n:"تشكن برجر",p:4500,i:"https://images.unsplash.com/photo-1550547660-d9450f859349"},
-{n:"دجاج مقلي",p:5000,i:"https://images.unsplash.com/photo-1562967916-eb82221dfb36"},
-{n:"شوربة",p:2000,i:"https://images.unsplash.com/photo-1604908177106-5e4f4b2e5c1c"},
-{n:"معكرونة",p:3500,i:"https://images.unsplash.com/photo-1589307004391-3c6d1c0f0b07"},
-{n:"لازانيا",p:4000,i:"https://images.unsplash.com/photo-1604908177188-5d7c4c9c8b9f"},
-{n:"فطيرة",p:2000,i:"https://images.unsplash.com/photo-1604908177160-3b9f8a8c4f7b"}
-];
-
-let grid = document.getElementById("grid");
-
-foods.forEach(f=>{
-  grid.innerHTML += `
-  <div class="item">
-    <img src="${f.i}">
-    <p>${f.n}</p>
-    <p>${f.p}</p>
-    <button class="buy">شراء</button>
+  content += `
+    <hr>
+    <h4>المجموع: ${total}</h4>
+    <p style="text-align:center">شكراً لزيارتكم ❤️</p>
   </div>
   `;
-});
-</script>
 
-</body>
-</html>
+  let win = window.open("", "", "width=300,height=600");
+  win.document.write(content);
+  win.print();
+}
