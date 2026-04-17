@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>مطعم كامتون</title>
 
 <style>
@@ -17,139 +18,170 @@ body {
   background-size: cover;
 }
 
-.invoice {
+.box {
   background: rgba(0,0,0,0.7);
   padding: 20px;
   margin: 20px auto;
-  width: 90%;
-  max-width: 400px;
+  width: 95%;
+  max-width: 500px;
   border-radius: 15px;
 }
 
 h2 { color: #a855f7; }
 h3 { color: #f97316; }
 
-input {
-  padding: 10px;
-  margin: 5px;
-  width: 80%;
-}
-
 button {
   padding: 10px;
   margin: 5px;
   border: none;
   color: white;
+  border-radius: 8px;
+  width: 90%;
 }
 
-.add { background: purple; }
+.menu button { background: #9333ea; }
 .delete { background: red; }
-.clear { background: orange; }
 .print { background: green; }
+.back { background: gray; }
 
-li {
-  margin: 5px;
+ul { list-style: none; padding: 0; }
+
+#invoicePage { display: none; }
+
+/* طباعة */
+@media print {
+  .delete, .print, .back {
+    display: none;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .box {
+    background: white;
+    color: black;
+  }
 }
 </style>
 
 </head>
 <body>
 
-<div class="invoice">
+<!-- 🔴 المنيو -->
+<div id="menuPage" class="box">
+  <h2>🍕 مطعم كامتون</h2>
 
-<h2>🧾 مطعم كامتون</h2>
+  <h3>🍖 وجبات رئيسية</h3>
+  <div class="menu">
+    <button onclick="addItem('مندي', 8000)">مندي - 8000</button>
+    <button onclick="addItem('منسف', 9000)">منسف - 9000</button>
+    <button onclick="addItem('دولمة', 7000)">دولمة - 7000</button>
+    <button onclick="addItem('كباب', 6000)">كباب - 6000</button>
+    <button onclick="addItem('تكة', 6500)">تكة - 6500</button>
+    <button onclick="addItem('برياني', 7500)">برياني - 7500</button>
+  </div>
 
-<p id="datetime"></p>
-<p>رقم الفاتورة: <span id="invoiceNum"></span></p>
+  <h3>🍔 وجبات سريعة</h3>
+  <div class="menu">
+    <button onclick="addItem('بركر', 4000)">بركر - 4000</button>
+    <button onclick="addItem('شاورما', 3500)">شاورما - 3500</button>
+    <button onclick="addItem('بيتزا', 5000)">بيتزا - 5000</button>
+    <button onclick="addItem('بطاطس', 2000)">بطاطس - 2000</button>
+    <button onclick="addItem('نكت', 3000)">نكت - 3000</button>
+  </div>
 
-<input id="customer" placeholder="اسم الزبون">
+  <h3>🥤 مشروبات</h3>
+  <div class="menu">
+    <button onclick="addItem('بيبسي', 1000)">بيبسي - 1000</button>
+    <button onclick="addItem('عصير', 1500)">عصير - 1500</button>
+    <button onclick="addItem('ماء', 500)">ماء - 500</button>
+    <button onclick="addItem('شاي', 500)">شاي - 500</button>
+    <button onclick="addItem('قهوة', 1000)">قهوة - 1000</button>
+  </div>
 
-<h3>➕ إضافة منتج</h3>
+  <br>
+  <button onclick="goToInvoice()">➡️ عرض الفاتورة</button>
+</div>
 
-<input id="name" placeholder="اسم المنتج">
-<input id="price" type="number" placeholder="السعر">
-<input id="qty" type="number" placeholder="الكمية">
+<!-- 🟢 الفاتورة -->
+<div id="invoicePage" class="box">
 
-<button class="add" onclick="addItem()">إضافة</button>
+  <h2>🧾 الفاتورة</h2>
+  <p>📞 الهاتف: 07905264140</p>
 
-<hr>
+  <p id="date"></p>
+  <p>رقم الفاتورة: <span id="invoiceNum"></span></p>
 
-<ul id="list"></ul>
+  <ul id="list"></ul>
 
-<h2>المجموع: <span id="total">0</span></h2>
+  <h3>المجموع: <span id="total">0</span></h3>
 
-<input id="money" placeholder="المبلغ المدفوع" type="number">
-<button onclick="calcChange()">احسب الباقي</button>
-
-<h3 id="change"></h3>
-
-<button class="clear" onclick="clearAll()">🗑️ مسح الكل</button>
-<button class="print" onclick="printPage()">🖨️ طباعة</button>
+  <button class="back" onclick="backToMenu()">⬅️ رجوع</button>
+  <button class="print" onclick="window.print()">🖨️ طباعة</button>
 
 </div>
 
 <script>
+let items = [];
 let total = 0;
 
-document.getElementById("invoiceNum").innerText =
-Math.floor(Math.random() * 100000);
+// 🧾 رقم فاتورة تسلسلي
+let invoice = localStorage.getItem("invoice") || 1;
+document.getElementById("invoiceNum").innerText = invoice;
+localStorage.setItem("invoice", parseInt(invoice) + 1);
 
-// وقت تلقائي
+// 📅 التاريخ + الوقت + السنة
 let now = new Date();
-document.getElementById("datetime").innerText =
-"📅 " + now.toLocaleDateString() + " ⏰ " + now.toLocaleTimeString();
+let day = now.getDate();
+let month = now.getMonth() + 1;
+let year = now.getFullYear();
+let hours = now.getHours();
+let minutes = now.getMinutes();
+let seconds = now.getSeconds();
 
-function addItem() {
-  let name = document.getElementById("name").value;
-  let price = parseFloat(document.getElementById("price").value);
-  let qty = parseInt(document.getElementById("qty").value);
+document.getElementById("date").innerText =
+"📅 " + day + "/" + month + "/" + year +
+" ⏰ " + hours + ":" + minutes + ":" + seconds;
 
-  if (!name || isNaN(price) || isNaN(qty)) {
-    alert("املأ كل الحقول!");
-    return;
-  }
+// إضافة عنصر
+function addItem(name, price) {
+  items.push({name, price});
+  total += price;
+}
 
-  let sum = price * qty;
-  total += sum;
+// عرض الفاتورة
+function goToInvoice() {
+  document.getElementById("menuPage").style.display = "none";
+  document.getElementById("invoicePage").style.display = "block";
 
-  let li = document.createElement("li");
+  let list = document.getElementById("list");
+  list.innerHTML = "";
 
-  li.innerHTML = `
-    ${name} | ${qty} = ${sum}
-    <button class="delete" onclick="removeItem(this, ${sum})">❌</button>
-  `;
+  items.forEach((item, i) => {
+    let li = document.createElement("li");
+    li.innerHTML = `
+      ${item.name} - ${item.price}
+      <button class="delete" onclick="removeItem(${i})">❌</button>
+    `;
+    list.appendChild(li);
+  });
 
-  document.getElementById("list").appendChild(li);
   document.getElementById("total").innerText = total;
-
-  // تفريغ الحقول
-  document.getElementById("name").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("qty").value = "";
 }
 
-function removeItem(btn, value) {
-  total -= value;
-  document.getElementById("total").innerText = total;
-  btn.parentElement.remove();
+// حذف
+function removeItem(index) {
+  total -= items[index].price;
+  items.splice(index, 1);
+  goToInvoice();
 }
 
-function clearAll() {
-  document.getElementById("list").innerHTML = "";
-  total = 0;
-  document.getElementById("total").innerText = 0;
-}
-
-function calcChange() {
-  let money = parseFloat(document.getElementById("money").value);
-  let change = money - total;
-
-  document.getElementById("change").innerText =
-  "الباقي: " + change;
-}
-
-function printPage() {
-  window.print();
+// رجوع
+function backToMenu() {
+  document.getElementById("menuPage").style.display = "block";
+  document.getElementById("invoicePage").style.display = "none";
 }
 </script>
 
