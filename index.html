@@ -8,180 +8,119 @@
 body {
   margin: 0;
   font-family: Arial;
-  color: white;
   text-align: center;
-
-  background:
-    linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
-    url("https://images.unsplash.com/photo-1594007654729-407eedc4be65");
-
-  background-size: cover;
+  background: #111;
+  color: white;
 }
 
-.box {
-  background: rgba(0,0,0,0.7);
-  padding: 20px;
-  margin: 20px auto;
-  width: 95%;
-  max-width: 500px;
-  border-radius: 15px;
-}
-
-h2 { color: #a855f7; }
-h3 { color: #f97316; }
-
-button {
+.menu button {
   padding: 10px;
   margin: 5px;
-  border: none;
+  background: purple;
   color: white;
+  border: none;
   border-radius: 8px;
-  width: 90%;
 }
 
-.menu button { background: #9333ea; }
-.delete { background: red; }
-.print { background: green; }
-.back { background: gray; }
+.invoice {
+  display: none;
+  background: white;
+  color: black;
+  width: 300px;
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 10px;
+}
 
-ul { list-style: none; padding: 0; }
+.delete { background: red; color: white; }
+.print { background: green; color: white; padding: 10px; margin-top: 10px; }
 
-#invoicePage { display: none; }
-
-/* طباعة */
 @media print {
-  .delete, .print, .back {
-    display: none;
-  }
-
-  body {
-    background: white;
-    color: black;
-  }
-
-  .box {
-    background: white;
-    color: black;
-  }
+  body * { display: none; }
+  .invoice, .invoice * { display: block; }
 }
 </style>
 
 </head>
 <body>
 
-<!-- 🔴 المنيو -->
-<div id="menuPage" class="box">
-  <h2>🍕 مطعم كامتون</h2>
+<h2>🍕 المنيو</h2>
 
-  <h3>🍖 وجبات رئيسية</h3>
-  <div class="menu">
-    <button onclick="addItem('مندي', 8000)">مندي - 8000</button>
-    <button onclick="addItem('منسف', 9000)">منسف - 9000</button>
-    <button onclick="addItem('دولمة', 7000)">دولمة - 7000</button>
-    <button onclick="addItem('كباب', 6000)">كباب - 6000</button>
-    <button onclick="addItem('تكة', 6500)">تكة - 6500</button>
-    <button onclick="addItem('برياني', 7500)">برياني - 7500</button>
-  </div>
-
-  <h3>🍔 وجبات سريعة</h3>
-  <div class="menu">
-    <button onclick="addItem('بركر', 4000)">بركر - 4000</button>
-    <button onclick="addItem('شاورما', 3500)">شاورما - 3500</button>
-    <button onclick="addItem('بيتزا', 5000)">بيتزا - 5000</button>
-    <button onclick="addItem('بطاطس', 2000)">بطاطس - 2000</button>
-    <button onclick="addItem('نكت', 3000)">نكت - 3000</button>
-  </div>
-
-  <h3>🥤 مشروبات</h3>
-  <div class="menu">
-    <button onclick="addItem('بيبسي', 1000)">بيبسي - 1000</button>
-    <button onclick="addItem('عصير', 1500)">عصير - 1500</button>
-    <button onclick="addItem('ماء', 500)">ماء - 500</button>
-    <button onclick="addItem('شاي', 500)">شاي - 500</button>
-    <button onclick="addItem('قهوة', 1000)">قهوة - 1000</button>
-  </div>
-
-  <br>
-  <button onclick="goToInvoice()">➡️ عرض الفاتورة</button>
+<div class="menu">
+<button onclick="addItem('مندي',8000)">مندي 8000</button>
+<button onclick="addItem('منسف',9000)">منسف 9000</button>
+<button onclick="addItem('دولمة',7000)">دولمة 7000</button>
+<button onclick="addItem('كباب',6000)">كباب 6000</button>
+<button onclick="addItem('بركر',4000)">بركر 4000</button>
+<button onclick="addItem('بطاطس',2000)">بطاطس 2000</button>
+<button onclick="addItem('بيبسي',1000)">بيبسي 1000</button>
 </div>
 
-<!-- 🟢 الفاتورة -->
-<div id="invoicePage" class="box">
+<br>
+<button onclick="goInvoice()">➡️ عرض الفاتورة</button>
 
-  <h2>🧾 الفاتورة</h2>
-  <p>📞 الهاتف: 07905264140</p>
+<div class="invoice" id="invoice">
 
-  <p id="date"></p>
-  <p>رقم الفاتورة: <span id="invoiceNum"></span></p>
+<h3>🧾 مطعم كامتون</h3>
+<p>📞 07905264140</p>
 
-  <ul id="list"></ul>
+<p id="date"></p>
+<p>رقم الفاتورة: <span id="inv"></span></p>
 
-  <h3>المجموع: <span id="total">0</span></h3>
+<ul id="list"></ul>
 
-  <button class="back" onclick="backToMenu()">⬅️ رجوع</button>
-  <button class="print" onclick="window.print()">🖨️ طباعة</button>
+<h3>المجموع: <span id="total">0</span></h3>
+
+<button class="print" onclick="window.print()">🖨️ طباعة</button>
 
 </div>
 
 <script>
-let items = [];
+let items = {};
 let total = 0;
 
-// 🧾 رقم فاتورة تسلسلي
-let invoice = localStorage.getItem("invoice") || 1;
-document.getElementById("invoiceNum").innerText = invoice;
-localStorage.setItem("invoice", parseInt(invoice) + 1);
+// رقم فاتورة متصاعد
+let invNum = localStorage.getItem("inv") || 1;
+document.getElementById("inv").innerText = invNum;
 
-// 📅 التاريخ + الوقت + السنة
-let now = new Date();
-let day = now.getDate();
-let month = now.getMonth() + 1;
-let year = now.getFullYear();
-let hours = now.getHours();
-let minutes = now.getMinutes();
-let seconds = now.getSeconds();
-
-document.getElementById("date").innerText =
-"📅 " + day + "/" + month + "/" + year +
-" ⏰ " + hours + ":" + minutes + ":" + seconds;
-
-// إضافة عنصر
 function addItem(name, price) {
-  items.push({name, price});
-  total += price;
+  if (!items[name]) {
+    items[name] = {price: price, qty: 0};
+  }
+
+  if (items[name].qty >= 20) return; // حد أقصى 20
+
+  items[name].qty++;
 }
 
-// عرض الفاتورة
-function goToInvoice() {
-  document.getElementById("menuPage").style.display = "none";
-  document.getElementById("invoicePage").style.display = "block";
+function goInvoice() {
+  document.querySelector(".menu").style.display = "none";
+  document.querySelector("button").style.display = "none";
 
   let list = document.getElementById("list");
   list.innerHTML = "";
+  total = 0;
 
-  items.forEach((item, i) => {
+  for (let name in items) {
+    let item = items[name];
+    let sum = item.price * item.qty;
+    total += sum;
+
     let li = document.createElement("li");
-    li.innerHTML = `
-      ${item.name} - ${item.price}
-      <button class="delete" onclick="removeItem(${i})">❌</button>
-    `;
+    li.innerText = `${name} x${item.qty} = ${sum}`;
     list.appendChild(li);
-  });
+  }
 
   document.getElementById("total").innerText = total;
-}
 
-// حذف
-function removeItem(index) {
-  total -= items[index].price;
-  items.splice(index, 1);
-  goToInvoice();
-}
+  let now = new Date();
+  document.getElementById("date").innerText =
+  now.toLocaleDateString() + " - " + now.toLocaleTimeString();
 
-// رجوع
-function backToMenu() {
-  document.getElementById("menuPage").style.display = "block";
-  document.getElementById("invoicePage").style.display = "none";
+  document.getElementById("invoice").style.display = "block";
+
+  // زيادة رقم الفاتورة
+  localStorage.setItem("inv", ++invNum);
 }
 </script>
 
