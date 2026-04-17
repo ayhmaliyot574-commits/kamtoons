@@ -33,7 +33,6 @@ body {
 #login button {
   padding: 15px;
   margin-left: 10px;
-  font-size: 16px;
   border: none;
   border-radius: 10px;
   background: purple;
@@ -98,7 +97,7 @@ button {
 </head>
 <body>
 
-<!-- 🔐 فقط مربع كلمة المرور -->
+<!-- 🔐 شاشة الدخول -->
 <div id="login">
   <input type="password" id="pass" placeholder="Enter Password">
   <button onclick="checkPass()">OK</button>
@@ -129,7 +128,8 @@ button {
 </div>
 
 <script>
-// كلمة المرور
+
+// 🔐 كلمة المرور (عادية)
 function checkPass() {
   let p = document.getElementById("pass").value;
 
