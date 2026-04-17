@@ -13,7 +13,7 @@ body {
   text-align:center;
 }
 
-/* شاشة كلمة المرور */
+/* شاشة القفل */
 #login {
   height:100vh;
   display:flex;
@@ -32,11 +32,17 @@ button {
   padding:8px;
   border:none;
   border-radius:10px;
-  cursor:pointer;
+  background:#9333ea;
+  color:white;
 }
 
 /* المنيو */
 #menu { display:none; }
+
+.header {
+  background:orange;
+  padding:10px;
+}
 
 .grid {
   display:flex;
@@ -49,36 +55,19 @@ button {
   margin:10px;
   padding:10px;
   border-radius:15px;
-  width:140px;
-  box-shadow:0 0 10px #000;
+  width:150px;
 }
 
 .item img {
   width:100%;
-  height:90px;
+  height:100px;
   border-radius:10px;
+  object-fit:cover;
 }
 
 .buy {
-  background:orange;
-  color:black;
+  background:#9333ea;
   margin-top:5px;
-}
-
-/* زر سري */
-.secret {
-  position:fixed;
-  bottom:10px;
-  right:10px;
-  opacity:0.1;
-}
-
-/* الفاتورة */
-#invoice {
-  display:none;
-  background:white;
-  color:black;
-  padding:20px;
 }
 </style>
 </head>
@@ -87,113 +76,91 @@ button {
 
 <!-- كلمة مرور -->
 <div id="login">
-  <h2>🔒 كلمة المرور</h2>
+  <h2>🔒 ادخل كلمة المرور</h2>
   <input id="pass" type="password">
-  <button onclick="check()">OK</button>
+  <br><br>
+  <button onclick="check()">دخول</button>
 </div>
 
 <!-- المنيو -->
 <div id="menu">
 
-<h2 style="color:orange">🍕 كامتون</h2>
-<p>📞 07905264140</p>
-
-<div class="grid">
-
-<!-- بيتزا -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65">
-<p>بيتزا</p>
-<p>8000</p>
-<button class="buy" onclick="buy('بيتزا',8000)">شراء</button>
+<div class="header">
+  <h2>🍕 مطعم كامتون</h2>
+  <p>📞 07905264140</p>
 </div>
 
-<!-- بركر -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
-<p>بركر</p>
-<p>4000</p>
-<button class="buy" onclick="buy('بركر',4000)">شراء</button>
-</div>
+<div class="grid" id="grid"></div>
 
-<!-- مندي -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1604908812653-3e49c1fda92e">
-<p>مندي</p>
-<p>8000</p>
-<button class="buy" onclick="buy('مندي',8000)">شراء</button>
-</div>
-
-<!-- كباب -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
-<p>كباب</p>
-<p>6000</p>
-<button class="buy" onclick="buy('كباب',6000)">شراء</button>
-</div>
-
-<!-- بطاطس -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5">
-<p>بطاطس</p>
-<p>2000</p>
-<button class="buy" onclick="buy('بطاطس',2000)">شراء</button>
-</div>
-
-<!-- عصير -->
-<div class="item">
-<img src="https://images.unsplash.com/photo-1553530666-ba11a90f7e40">
-<p>عصير</p>
-<p>1500</p>
-<button class="buy" onclick="buy('عصير',1500)">شراء</button>
-</div>
-
-</div>
-
-</div>
-
-<!-- زر سري -->
-<button class="secret" onclick="openInvoice()">.</button>
-
-<!-- الفاتورة (بس الك) -->
-<div id="invoice">
-<h2>🧾 الفاتورة</h2>
-<ul id="list"></ul>
-<h3 id="total">0</h3>
-<button onclick="window.print()">طباعة</button>
 </div>
 
 <script>
-let total = 0;
-
-/* دخول */
 function check(){
-  if(document.getElementById("pass").value === "Ff511Ff522Ff533Ff"){
-    document.getElementById("login").style.display="none";
-    document.getElementById("menu").style.display="block";
+  let password = document.getElementById("pass").value;
+
+  if(password === "Ff511Ff522Ff533Ff"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("menu").style.display = "block";
   } else {
-    alert("خطأ");
+    alert("❌ كلمة المرور غلط");
   }
 }
 
-/* شراء */
-function buy(name, price){
-  total += price;
+let foods = [
+{n:"بركر",p:4000,i:"https://images.unsplash.com/photo-1550547660-d9450f859349"},
+{n:"بيتزا",p:5000,i:"https://images.unsplash.com/photo-1594007654729-407eedc4be65"},
+{n:"بطاطس",p:2000,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
+{n:"كباب",p:6000,i:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"},
+{n:"مندي",p:8000,i:"https://images.unsplash.com/photo-1604908812653-3e49c1fda92e"},
+{n:"منسف",p:9000,i:"https://images.unsplash.com/photo-1604908554168-8f43f8f2c2af"},
+{n:"دولمة",p:7000,i:"https://images.unsplash.com/photo-1617196034183-421b4917c92d"},
+{n:"فلافل",p:1500,i:"https://images.unsplash.com/photo-1617196034796-73dfa50e8c90"},
+{n:"شاورما",p:4500,i:"https://images.unsplash.com/photo-1604909052981-68d7c53e36b0"},
+{n:"سمك",p:7000,i:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"},
+{n:"دجاج مشوي",p:5500,i:"https://images.unsplash.com/photo-1604908177522-402c7b0f7fd5"},
+{n:"عصير ليمون",p:1500,i:"https://images.unsplash.com/photo-1553530666-ba11a90f7e40"},
+{n:"عصير برتقال",p:1500,i:"https://images.unsplash.com/photo-1572441710534-6807e7a2d1c6"},
+{n:"شاي",p:500,i:"https://images.unsplash.com/photo-1576092768241-dec231879fc3"},
+{n:"قهوة",p:1000,i:"https://images.unsplash.com/photo-1509042239860-f550ce710b93"},
+{n:"كيك",p:2000,i:"https://images.unsplash.com/photo-1578985545062-69928b1d9587"},
+{n:"كنافة",p:3000,i:"https://images.unsplash.com/photo-1604908177481-57e8e64fdf75"},
+{n:"آيس كريم",p:2000,i:"https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"},
+{n:"برياني",p:7500,i:"https://images.unsplash.com/photo-1604908177433-85b5c2e5c98b"},
+{n:"نودلز",p:3500,i:"https://images.unsplash.com/photo-1604908177192-4a8b2ddb3f7e"},
+{n:"ستيك",p:12000,i:"https://images.unsplash.com/photo-1551183053-bf91a1d81141"},
+{n:"بيتزا دجاج",p:5500,i:"https://images.unsplash.com/photo-1548365328-9f547fb0953c"},
+{n:"بيتزا خضار",p:5000,i:"https://images.unsplash.com/photo-1601924638867-3ec2f2c0c94b"},
+{n:"بيتزا لحم",p:6000,i:"https://images.unsplash.com/photo-1542281286-9e0a16bb7366"},
+{n:"رز أبيض",p:2000,i:"https://images.unsplash.com/photo-1586201375761-83865001e17b"},
+{n:"رز برياني",p:4000,i:"https://images.unsplash.com/photo-1604908177099-9df47b4b51f7"},
+{n:"سلطة",p:1500,i:"https://images.unsplash.com/photo-1556911220-bff31c812dba"},
+{n:"تبولة",p:1500,i:"https://images.unsplash.com/photo-1604908177123-fb3e7d3f8b6a"},
+{n:"حمص",p:1200,i:"https://images.unsplash.com/photo-1604908177110-4bb7a8a798ed"},
+{n:"متبل",p:1200,i:"https://images.unsplash.com/photo-1604908177101-5d7a9a7a89c7"},
+{n:"بيتزا تونة",p:5500,i:"https://images.unsplash.com/photo-1601924638867-3ec2f2c0c94b"},
+{n:"بيتزا سجق",p:6000,i:"https://images.unsplash.com/photo-1513104890138-7c749659a591"},
+{n:"بطاطس جبن",p:3000,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
+{n:"بطاطس حار",p:2500,i:"https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"},
+{n:"تشكن برجر",p:4500,i:"https://images.unsplash.com/photo-1550547660-d9450f859349"},
+{n:"دجاج مقلي",p:5000,i:"https://images.unsplash.com/photo-1562967916-eb82221dfb36"},
+{n:"شوربة",p:2000,i:"https://images.unsplash.com/photo-1604908177106-5e4f4b2e5c1c"},
+{n:"معكرونة",p:3500,i:"https://images.unsplash.com/photo-1589307004391-3c6d1c0f0b07"},
+{n:"لازانيا",p:4000,i:"https://images.unsplash.com/photo-1604908177188-5d7c4c9c8b9f"},
+{n:"فطيرة",p:2000,i:"https://images.unsplash.com/photo-1604908177160-3b9f8a8c4f7b"}
+];
 
-  let li = document.createElement("li");
-  li.innerText = name + " - " + price;
+let grid = document.getElementById("grid");
 
-  document.getElementById("list").appendChild(li);
-  document.getElementById("total").innerText = "المجموع: " + total;
-}
-
-/* فتح الفاتورة (سري) */
-function openInvoice(){
-  let code = prompt("ادخل كود الادمن");
-  if(code === "admin123"){
-    document.getElementById("invoice").style.display="block";
-  }
-}
+foods.forEach(f=>{
+  grid.innerHTML += `
+  <div class="item">
+    <img src="${f.i}">
+    <p>${f.n}</p>
+    <p>${f.p}</p>
+    <button class="buy">شراء</button>
+  </div>
+  `;
+});
 </script>
 
 </body>
