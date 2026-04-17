@@ -8,64 +8,48 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: black;
-  color: white;
-  text-align: center;
-}
-
-/* شاشة كلمة المرور */
-#login {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#login input {
-  width: 250px;
-  padding: 15px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: none;
-  text-align: center;
-}
-
-#login button {
-  padding: 15px;
-  margin-left: 10px;
-  border: none;
-  border-radius: 10px;
-  background: purple;
-  color: white;
-}
-
-/* الموقع */
-#app {
-  display: none;
   background: #111;
-  min-height: 100vh;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  background: orange;
+  padding: 10px;
+}
+
+.phone {
+  margin: 5px;
+  font-size: 18px;
 }
 
 .menu {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
 }
 
-.item {
-  display: flex;
-  align-items: center;
-  background: purple;
-  margin: 5px;
-  padding: 5px;
+.category {
+  background: #222;
+  padding: 10px;
   border-radius: 10px;
-  cursor: pointer;
 }
 
-.item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px;
+.category h2 {
+  color: orange;
+}
+
+button {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: purple;
+  color: white;
+  cursor: pointer;
 }
 
 .invoice {
@@ -78,16 +62,8 @@ body {
   border-radius: 10px;
 }
 
-button {
-  padding: 10px;
-  margin: 5px;
-  border: none;
-  border-radius: 8px;
-}
+.print { background: green; }
 
-.print { background: green; color: white; }
-
-/* طباعة */
 @media print {
   body * { display: none; }
   .invoice, .invoice * { display: block; }
@@ -97,26 +73,56 @@ button {
 </head>
 <body>
 
-<!-- 🔐 شاشة الدخول -->
-<div id="login">
-  <input type="password" id="pass" placeholder="Enter Password">
-  <button onclick="checkPass()">OK</button>
+<h1>🍕 مطعم كامتون</h1>
+<div class="phone">📞 07905264140</div>
+
+<div class="menu">
+
+<!-- بيتزا -->
+<div class="category">
+<h2>بيتزا</h2>
+<button onclick="add('بيتزا خضار',18)">بيتزا خضار - 18</button>
+<button onclick="add('بيتزا مارجريتا',18)">بيتزا مارجريتا - 18</button>
+<button onclick="add('بيتزا مشكل جبن',18)">بيتزا مشكل جبن - 18</button>
+<button onclick="add('بيتزا دجاج',21)">بيتزا دجاج - 21</button>
+<button onclick="add('بيتزا لحم',21)">بيتزا لحم - 21</button>
+<button onclick="add('بيتزا بيبروني',21)">بيتزا بيبروني - 21</button>
 </div>
 
-<!-- 🔥 الموقع -->
-<div id="app">
+<!-- مناقيش -->
+<div class="category">
+<h2>مناقيش</h2>
+<button onclick="add('جبنة عكاوي',11)">جبنة عكاوي - 11</button>
+<button onclick="add('جبنة سائل',9)">جبنة سائل - 9</button>
+<button onclick="add('جبنة موزاريلا',11)">جبنة موزاريلا - 11</button>
+<button onclick="add('زعتر',10)">زعتر - 10</button>
+<button onclick="add('لبنة',10)">لبنة - 10</button>
+</div>
 
-<h2>🍕 المنيو (300 أكلة)</h2>
-<div class="menu" id="menu"></div>
+<!-- بطاطس -->
+<div class="category">
+<h2>بطاطس</h2>
+<button onclick="add('بطاطس',7)">بطاطس - 7</button>
+<button onclick="add('بطاطس بالجبن',8)">بطاطس بالجبن - 8</button>
+</div>
 
-<button onclick="goInvoice()">➡️ الفاتورة</button>
+<!-- حلويات -->
+<div class="category">
+<h2>الحلا</h2>
+<button onclick="add('نوتيلا',10)">نوتيلا - 10</button>
+<button onclick="add('نوتيلا موز',12)">نوتيلا موز - 12</button>
+</div>
+
+</div>
+
+<button onclick="showInvoice()">📄 عرض الفاتورة</button>
 
 <div class="invoice" id="invoice">
 <h3>🧾 مطعم كامتون</h3>
 <p>📞 07905264140</p>
 
 <p id="date"></p>
-<p>رقم الفاتورة: <span id="inv"></span></p>
+<p>رقم الفاتورة: <span id="num"></span></p>
 
 <ul id="list"></ul>
 
@@ -125,84 +131,39 @@ button {
 <button class="print" onclick="window.print()">🖨️ طباعة</button>
 </div>
 
-</div>
-
 <script>
-
-// 🔐 كلمة المرور (عادية)
-function checkPass() {
-  let p = document.getElementById("pass").value;
-
-  if (p === "Ff511Ff522Ff533Ff") {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-  } else {
-    alert("❌ كلمة المرور غلط");
-  }
-}
-
-// بيانات
-let items = {};
+let items = [];
 let total = 0;
 
-// صورة
-let imgSrc = "https://images.unsplash.com/photo-1594007654729-407eedc4be65";
-
-// توليد 300 أكلة
-let menuDiv = document.getElementById("menu");
-
-for (let i = 1; i <= 300; i++) {
-  let price = 1000 + (i * 20);
-
-  let div = document.createElement("div");
-  div.className = "item";
-
-  div.innerHTML = `
-    <img src="${imgSrc}">
-    <span>أكلة ${i} - ${price}</span>
-  `;
-
-  div.onclick = () => addItem("أكلة " + i, price);
-
-  menuDiv.appendChild(div);
-}
-
 // رقم فاتورة
-let invNum = localStorage.getItem("inv") || 1;
-document.getElementById("inv").innerText = invNum;
+let num = localStorage.getItem("inv") || 1;
+document.getElementById("num").innerText = num;
 
-function addItem(name, price) {
-  if (!items[name]) items[name] = {price: price, qty: 0};
-  if (items[name].qty >= 20) return;
-  items[name].qty++;
+function add(name, price) {
+  items.push({name, price});
 }
 
-function goInvoice() {
-  document.querySelector(".menu").style.display = "none";
-
+function showInvoice() {
   let list = document.getElementById("list");
   list.innerHTML = "";
   total = 0;
 
-  for (let name in items) {
-    let item = items[name];
-    let sum = item.price * item.qty;
-    total += sum;
-
+  items.forEach(i => {
+    total += i.price;
     let li = document.createElement("li");
-    li.innerText = `${name} x${item.qty} = ${sum}`;
+    li.innerText = i.name + " - " + i.price;
     list.appendChild(li);
-  }
+  });
 
   document.getElementById("total").innerText = total;
 
   let now = new Date();
   document.getElementById("date").innerText =
-  now.toLocaleDateString() + " - " + now.toLocaleTimeString();
+    now.toLocaleDateString() + " " + now.toLocaleTimeString();
 
   document.getElementById("invoice").style.display = "block";
 
-  localStorage.setItem("inv", ++invNum);
+  localStorage.setItem("inv", ++num);
 }
 </script>
 
