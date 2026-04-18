@@ -1,100 +1,52 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>آلة حاسبة</title>
+<title>لعبة بسيطة</title>
 <style>
-body {
-    background: #222;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial;
-}
-.calculator {
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-}
-#display {
-    width: 100%;
-    height: 50px;
-    font-size: 20px;
-    margin-bottom: 10px;
-    text-align: right;
-    padding: 5px;
-}
-button {
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-button:hover {
-    background: orange;
-}
+body { margin:0; overflow:hidden; }
 </style>
 </head>
 <body>
 
-<div class="calculator">
-    <input type="text" id="display" disabled>
-
-    <div>
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="append('/')">/</button>
-        <button onclick="append('*')">*</button>
-        <button onclick="append('-')">-</button>
-    </div>
-
-    <div>
-        <button onclick="append('7')">7</button>
-        <button onclick="append('8')">8</button>
-        <button onclick="append('9')">9</button>
-        <button onclick="append('+')">+</button>
-    </div>
-
-    <div>
-        <button onclick="append('4')">4</button>
-        <button onclick="append('5')">5</button>
-        <button onclick="append('6')">6</button>
-        <button onclick="calculate()">=</button>
-    </div>
-
-    <div>
-        <button onclick="append('1')">1</button>
-        <button onclick="append('2')">2</button>
-        <button onclick="append('3')">3</button>
-    </div>
-
-    <div>
-        <button onclick="append('0')">0</button>
-        <button onclick="append('.')">.</button>
-    </div>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-let display = document.getElementById("display");
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
-function append(value) {
-    display.value += value;
-}
+let renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-function clearDisplay() {
-    display.value = "";
-}
+// أرضية
+let geometry = new THREE.PlaneGeometry(20,20);
+let material = new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide});
+let floor = new THREE.Mesh(geometry, material);
+floor.rotation.x = Math.PI / 2;
+scene.add(floor);
 
-function calculate() {
-    try {
-        display.value = eval(display.value);
-    } catch {
-        display.value = "خطأ";
-    }
+// لاعب (مكعب)
+let playerGeo = new THREE.BoxGeometry();
+let playerMat = new THREE.MeshBasicMaterial({color: 0xff0000});
+let player = new THREE.Mesh(playerGeo, playerMat);
+scene.add(player);
+
+camera.position.z = 5;
+
+// تحكم
+document.addEventListener("keydown", (e)=>{
+    if(e.key === "w") player.position.z -= 0.2;
+    if(e.key === "s") player.position.z += 0.2;
+    if(e.key === "a") player.position.x -= 0.2;
+    if(e.key === "d") player.position.x += 0.2;
+});
+
+// تشغيل
+function animate(){
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
+animate();
 </script>
 
 </body>
