@@ -1,32 +1,101 @@
-function printInvoice(){
-
-  let content = `
-  <div style="width:220px;font-family:monospace">
-    <h3 style="text-align:center">كامتون</h3>
-    <p style="text-align:center">07905264140</p>
-    <hr>
-  `;
-
-  let total = 0;
-
-  items.forEach(i=>{
-    content += `
-      <div style="display:flex;justify-content:space-between">
-        <span>${i.name}</span>
-        <span>${i.price}</span>
-      </div>
-    `;
-    total += i.price;
-  });
-
-  content += `
-    <hr>
-    <h4>المجموع: ${total}</h4>
-    <p style="text-align:center">شكراً لزيارتكم ❤️</p>
-  </div>
-  `;
-
-  let win = window.open("", "", "width=300,height=600");
-  win.document.write(content);
-  win.print();
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>آلة حاسبة</title>
+<style>
+body {
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial;
 }
+.calculator {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+}
+#display {
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: right;
+    padding: 5px;
+}
+button {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+button:hover {
+    background: orange;
+}
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <input type="text" id="display" disabled>
+
+    <div>
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="append('/')">/</button>
+        <button onclick="append('*')">*</button>
+        <button onclick="append('-')">-</button>
+    </div>
+
+    <div>
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button onclick="append('+')">+</button>
+    </div>
+
+    <div>
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="calculate()">=</button>
+    </div>
+
+    <div>
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+    </div>
+
+    <div>
+        <button onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+    </div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+
+function append(value) {
+    display.value += value;
+}
+
+function clearDisplay() {
+    display.value = "";
+}
+
+function calculate() {
+    try {
+        display.value = eval(display.value);
+    } catch {
+        display.value = "خطأ";
+    }
+}
+</script>
+
+</body>
+</html>
